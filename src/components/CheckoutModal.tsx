@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, CheckCircle2, Truck, Store, CreditCard, Banknote, ShieldCheck } from "lucide-react";
+import { X, CheckCircle2, Truck, Store, CreditCard, Banknote } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/services/api";
 

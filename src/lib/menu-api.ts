@@ -15,6 +15,10 @@ export const API_MENU_URL = `https://www.foodchow.com/api/FoodChowWD/GetRestaura
 export const API_CUSTOMIZE_URL = (itemId: number) =>
   `https://admin.foodchow.com/api/FoodChowWD/GetCustomizationDetailsOfItemWD_multiWithOrder?item_id=${itemId}&locale_id=null`;
 
+// NOTE: The FoodChow API for ShopId=3161 does not return a menu tab list in its response.
+// These menu tabs are taken from the reference UI (foodchowdemoindia.foodchow.com).
+// They serve as navigation UI tabs only — the real category/item data always comes
+// from the API response or the fallback-menu.json file.
 export const DEFAULT_MENUS: MenuTab[] = [
   { id: 0, menu_name: "Main Menu", menu_url: "" },
   { id: 419, menu_name: "Breakfast", menu_url: "breakfast" },
@@ -22,6 +26,9 @@ export const DEFAULT_MENUS: MenuTab[] = [
   { id: 421, menu_name: "Dinner", menu_url: "dinner" },
 ];
 
+// NOTE: Basic restaurant metadata sourced from the FoodChow API response for ShopId=3161.
+// ShopName and ShopLogo come from the actual API. timingText is the display string
+// returned by the API. We do NOT hardcode phone numbers, addresses, FSSAI, or fake ratings.
 export const RESTAURANT_INFO: RestaurantInfo = {
   ShopId: "3161",
   ShopName: "FoodChow Demo INDIA",
@@ -55,6 +62,17 @@ export function getFallbackMenu(shopId: number = DEFAULT_SHOP_ID): RestaurantMen
   }
 }
 
+/**
+ * Fetches the restaurant menu from the FoodChow live API.
+ *
+ * Decision flow:
+ * 1. Call live FoodChow API with 8s timeout
+ * 2. If HTTP request fails (network error / timeout) → use fallback-menu.json
+ * 3. If HTTP response is not OK (4xx/5xx) → use fallback-menu.json
+ * 4. If response.message === "No any records found!" → use fallback-menu.json
+ * 5. If response.data cannot be parsed into a usable menu → use fallback-menu.json
+ * 6. Otherwise → parse and use live API data
+ */
 export async function getRestaurantMenu(shopId: number = DEFAULT_SHOP_ID): Promise<RestaurantMenuResult> {
   try {
     const controller = new AbortController();

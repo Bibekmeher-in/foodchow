@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { X, MapPin, Phone, Clock, Utensils, ShieldCheck, ExternalLink, Globe } from "lucide-react";
+import { X, MapPin, Phone, Clock, ExternalLink, Globe } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { RestaurantInfo } from "@/types/foodchow";
 import { getLogoImageUrl } from "@/services/api";
