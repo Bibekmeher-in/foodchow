@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, CheckCircle2, Truck, Store, CreditCard, Banknote } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/services/api";
@@ -15,12 +15,19 @@ export const CheckoutModal: React.FC = () => {
     clearCart,
     isOrderSuccess,
     setIsOrderSuccess,
+    setIsCartOpenMobile,
   } = useCart();
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "card">("cash");
+
+  useEffect(() => {
+    if (isCheckoutModalOpen) {
+      setIsCartOpenMobile(false);
+    }
+  }, [isCheckoutModalOpen, setIsCartOpenMobile]);
 
   if (!isCheckoutModalOpen) return null;
 
@@ -36,7 +43,7 @@ export const CheckoutModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
       <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b border-gray-100 shrink-0">
           <h2 className="font-bold text-gray-900 text-base sm:text-lg">

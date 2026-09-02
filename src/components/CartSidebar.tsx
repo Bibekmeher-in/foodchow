@@ -20,6 +20,7 @@ export const CartSidebar: React.FC = () => {
     deliveryFee,
     grandTotal,
     setIsCheckoutModalOpen,
+    setIsCartOpenMobile,
   } = useCart();
 
   return (
@@ -237,7 +238,10 @@ export const CartSidebar: React.FC = () => {
           </div>
 
           <button
-            onClick={() => setIsCheckoutModalOpen(true)}
+            onClick={() => {
+              setIsCartOpenMobile(false);
+              setIsCheckoutModalOpen(true);
+            }}
             className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-3 rounded-xl font-bold text-sm transition-all duration-150 cursor-pointer shadow-md shadow-primary/20 active:scale-[0.99]"
           >
             <span>Proceed to Checkout</span>
