@@ -17,7 +17,15 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'foodchowdemoindia.foodchow.com',
-      }
+      },
+      {
+        protocol: 'http',
+        hostname: 'www.foodchow.com',
+      },
+      {
+        protocol: 'http',
+        hostname: 'admin.foodchow.com',
+      },
     ],
   },
 };
