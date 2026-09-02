@@ -53,8 +53,6 @@ interface CartContextType {
   setIsOrderSuccess: (success: boolean) => void;
   isInfoModalOpen: boolean;
   setIsInfoModalOpen: (open: boolean) => void;
-  isBookingModalOpen: boolean;
-  setIsBookingModalOpen: (open: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -72,7 +70,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [customizingItem, setCustomizingItem] = useState<MenuItem | null>(null);
   const [isOrderSuccess, setIsOrderSuccess] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -206,9 +203,23 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const itemCount = cart.reduce((sum, i) => sum + i.quantity, 0);
   const subtotal = Number(cart.reduce((sum, i) => sum + i.totalPrice, 0).toFixed(2));
-  const taxAmount = Number((subtotal * 0.05).toFixed(2));
-  const deliveryFee = orderType === "delivery" && subtotal > 0 ? (subtotal >= 500 ? 0 : 40) : 0;
-  const grandTotal = Number((subtotal + taxAmount + deliveryFee).toFixed(2));
+  const taxAmount = 0;
+  const deliveryFee = 0;
+  const grandTotal = subtotal;
+
+  const handleSetCartOpenMobile = (open: boolean) => {
+    if (open) {
+      setIsCheckoutModalOpen(false);
+    }
+    setIsCartOpenMobile(open);
+  };
+
+  const handleSetCheckoutModalOpen = (open: boolean) => {
+    if (open) {
+      setIsCartOpenMobile(false);
+    }
+    setIsCheckoutModalOpen(open);
+  };
 
   return (
     <CartContext.Provider
@@ -235,17 +246,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         deliveryFee,
         grandTotal,
         isCartOpenMobile,
-        setIsCartOpenMobile,
+        setIsCartOpenMobile: handleSetCartOpenMobile,
         isCheckoutModalOpen,
-        setIsCheckoutModalOpen,
+        setIsCheckoutModalOpen: handleSetCheckoutModalOpen,
         customizingItem,
         setCustomizingItem,
         isOrderSuccess,
         setIsOrderSuccess,
         isInfoModalOpen,
         setIsInfoModalOpen,
-        isBookingModalOpen,
-        setIsBookingModalOpen,
       }}
     >
       {children}

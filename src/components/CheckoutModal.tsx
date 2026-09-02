@@ -15,19 +15,12 @@ export const CheckoutModal: React.FC = () => {
     clearCart,
     isOrderSuccess,
     setIsOrderSuccess,
-    setIsCartOpenMobile,
   } = useCart();
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "card">("cash");
-
-  useEffect(() => {
-    if (isCheckoutModalOpen) {
-      setIsCartOpenMobile(false);
-    }
-  }, [isCheckoutModalOpen, setIsCartOpenMobile]);
 
   if (!isCheckoutModalOpen) return null;
 
@@ -47,7 +40,7 @@ export const CheckoutModal: React.FC = () => {
       <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b border-gray-100 shrink-0">
           <h2 className="font-bold text-gray-900 text-base sm:text-lg">
-            {isOrderSuccess ? "Order Placed Successfully" : "Review & Checkout"}
+            {isOrderSuccess ? "Order Summary (Demo Mode)" : "Review & Checkout"}
           </h2>
           <button
             onClick={handleClose}
@@ -65,9 +58,12 @@ export const CheckoutModal: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="text-xl font-bold text-gray-900">Thank You For Your Order!</h3>
+              <h3 className="text-xl font-bold text-gray-900">Order Request Preview</h3>
               <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                Your order request for <span className="font-semibold text-gray-900">{fullName || "Customer"}</span> has been recorded.
+                Order details recorded for <span className="font-semibold text-gray-900">{fullName || "Customer"}</span>.
+              </p>
+              <p className="text-[11px] text-amber-700 bg-amber-50 rounded-lg p-2 mt-2 border border-amber-200/80">
+                Note: This is a frontend demo assignment. No backend order API is connected.
               </p>
             </div>
 
@@ -79,7 +75,7 @@ export const CheckoutModal: React.FC = () => {
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Payment Method:</span>
+                <span className="text-gray-500">Payment Preference:</span>
                 <span className="font-semibold text-gray-900 capitalize">
                   {paymentMethod === "cash" ? "Cash on Delivery" : "Card / Online"}
                 </span>
@@ -94,7 +90,7 @@ export const CheckoutModal: React.FC = () => {
               onClick={handleClose}
               className="w-full bg-primary hover:bg-primary-hover text-white py-3 rounded-xl font-bold text-sm transition-colors cursor-pointer shadow-md shadow-primary/20"
             >
-              Order More Food
+              Back to Menu
             </button>
           </div>
         ) : (
@@ -226,7 +222,7 @@ export const CheckoutModal: React.FC = () => {
                 type="submit"
                 className="w-full flex items-center justify-between bg-primary hover:bg-primary-hover text-white px-5 py-3 rounded-xl font-bold text-sm transition-all duration-150 cursor-pointer shadow-md shadow-primary/20"
               >
-                <span>Confirm & Place Order</span>
+                <span>Submit Demo Order</span>
                 <span>{formatPrice(grandTotal)}</span>
               </button>
             </div>

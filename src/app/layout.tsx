@@ -5,7 +5,6 @@ import { CartProvider } from "@/context/CartContext";
 import { CustomizationModal } from "@/components/CustomizationModal";
 import { CheckoutModal } from "@/components/CheckoutModal";
 import { MobileCartBar } from "@/components/MobileCartBar";
-import { TableBookingModal } from "@/components/TableBookingModal";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
@@ -34,7 +33,6 @@ export default function RootLayout({
           {children}
           <CustomizationModal />
           <CheckoutModal />
-          <TableBookingModal />
           <MobileCartBar />
         </CartProvider>
       </body>

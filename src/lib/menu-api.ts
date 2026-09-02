@@ -92,12 +92,14 @@ export async function getRestaurantMenu(shopId: number = DEFAULT_SHOP_ID): Promi
     if (res.ok) {
       const liveJson = await res.json();
 
-      // Check explicit requirement condition: message === "No any records found!"
-      if (liveJson && liveJson.message === "No any records found!") {
+      // Case A: API returns "No any records found!"
+      // Immediately use fallback-menu.json without treating populated data as live API data
+      const message = typeof liveJson?.message === "string" ? liveJson.message.trim() : "";
+      if (message === "No any records found!" || message.toLowerCase() === "no any records found!") {
         return getFallbackMenu(shopId);
       }
 
-      // Check if response contains usable menu data
+      // Case B: API returns a valid response without that message
       const parsedData = parseMenuResponse(liveJson);
       if (isUsableMenuData(parsedData)) {
         const { categories, deals } = normalizeMenuData(parsedData, shopId);
@@ -114,6 +116,7 @@ export async function getRestaurantMenu(shopId: number = DEFAULT_SHOP_ID): Promi
     console.warn("[FoodChow API] Live API request failed, loading fallback data:", error?.message || error);
   }
 
+  // Case C: Fallback when network error, timeout, HTTP error, invalid JSON, or unusable menu data
   return getFallbackMenu(shopId);
 }
 

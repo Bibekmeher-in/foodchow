@@ -16,8 +16,6 @@ export const CartSidebar: React.FC = () => {
     clearCart,
     itemCount,
     subtotal,
-    taxAmount,
-    deliveryFee,
     grandTotal,
     setIsCheckoutModalOpen,
     setIsCartOpenMobile,
@@ -212,25 +210,9 @@ export const CartSidebar: React.FC = () => {
         <div className="p-4 border-t border-gray-100 bg-gray-50/60 space-y-3 shrink-0">
           <div className="space-y-1.5 text-xs text-gray-600">
             <div className="flex justify-between">
-              <span>Item Subtotal</span>
+              <span>Item Total</span>
               <span className="font-medium text-gray-900">{formatPrice(subtotal)}</span>
             </div>
-            <div className="flex justify-between">
-              <span>Taxes & Charges (5% GST)</span>
-              <span className="font-medium text-gray-900">{formatPrice(taxAmount)}</span>
-            </div>
-            {orderType === "delivery" && (
-              <div className="flex justify-between items-center">
-                <span>Delivery Fee</span>
-                <span className="font-medium text-gray-900">
-                  {deliveryFee === 0 ? (
-                    <span className="text-emerald-600 font-bold">FREE</span>
-                  ) : (
-                    formatPrice(deliveryFee)
-                  )}
-                </span>
-              </div>
-            )}
             <div className="flex justify-between pt-2 border-t border-gray-200 text-sm font-bold text-gray-900">
               <span>Grand Total</span>
               <span className="text-primary text-base font-extrabold">{formatPrice(grandTotal)}</span>

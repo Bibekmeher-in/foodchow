@@ -76,11 +76,12 @@ The application implements a strict and resilient data fetching and fallback str
 5. **Cart & Order Summary**:
    - Interactive cart with quantity increase (`+`), decrease (`-`), and item removal.
    - Delivery / Take Away toggle.
-   - Subtotal, 5% GST tax calculation, and delivery fee calculation.
-   - Desktop sticky sidebar + Mobile bottom drawer.
+   - Truthful item pricing and grand total directly calculated from selected items and customizations.
+   - Desktop sticky sidebar + Mobile bottom drawer with coordinated modal transitions.
 
 6. **Order Placement Demo Flow**:
-   - Transparent frontend order confirmation modal summarizing order details, type, and payment method without invented backend SMS claims.
+   - Transparent frontend order confirmation modal summarizing order details, type, and payment preference.
+   - Clearly identified as a frontend demo preview without fake backend order claims or fake SMS messages.
 
 ---
 
@@ -96,16 +97,16 @@ src/
 │   ├── layout.tsx               # Root layout with font and CartProvider
 │   └── page.tsx                 # Home page (Server Component)
 ├── components/
-│   ├── CartSidebar.tsx          # Cart sidebar and subtotal breakdown
+│   ├── CartSidebar.tsx          # Cart sidebar and total breakdown
 │   ├── CategoryNav.tsx          # Sticky horizontal category navigation
-│   ├── CheckoutModal.tsx        # Frontend review & checkout modal
+│   ├── CheckoutModal.tsx        # Frontend review & checkout modal (z-[60])
 │   ├── CustomizationModal.tsx   # Item size & add-ons customization modal
 │   ├── DealsSection.tsx         # Deals/combos section (rendered when present)
 │   ├── Footer.tsx               # Standard FoodChow footer
 │   ├── Header.tsx               # Header with logo, timing, and order type switcher
 │   ├── MenuContainer.tsx        # Main menu grid & category sections
 │   ├── MenuItemCard.tsx         # Responsive dish card with veg indicator & price
-│   ├── MobileCartBar.tsx        # Floating mobile cart bar & drawer
+│   ├── MobileCartBar.tsx        # Floating mobile cart bar & drawer (z-50)
 │   ├── RestaurantInfoModal.tsx  # Restaurant info modal
 │   └── SearchBar.tsx            # Live dish search & Veg/Non-Veg filter
 ├── context/

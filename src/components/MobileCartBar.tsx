@@ -7,11 +7,17 @@ import { formatPrice } from "@/services/api";
 import { CartSidebar } from "@/components/CartSidebar";
 
 export const MobileCartBar: React.FC = () => {
-  const { itemCount, grandTotal, isCartOpenMobile, setIsCartOpenMobile } = useCart();
+  const {
+    itemCount,
+    grandTotal,
+    isCartOpenMobile,
+    setIsCartOpenMobile,
+    isCheckoutModalOpen,
+  } = useCart();
 
   return (
     <>
-      {itemCount > 0 && !isCartOpenMobile && (
+      {itemCount > 0 && !isCartOpenMobile && !isCheckoutModalOpen && (
         <div className="fixed bottom-4 left-0 right-0 z-40 px-4 lg:hidden animate-slide-up">
           <div className="mx-auto max-w-md bg-primary text-white p-3 rounded-2xl shadow-xl flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -39,9 +45,15 @@ export const MobileCartBar: React.FC = () => {
         </div>
       )}
 
-      {isCartOpenMobile && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end bg-black/60 backdrop-blur-xs lg:hidden animate-fade-in">
-          <div className="relative w-full max-h-[85vh] bg-white rounded-t-3xl shadow-2xl flex flex-col overflow-hidden animate-slide-up">
+      {isCartOpenMobile && !isCheckoutModalOpen && (
+        <div
+          onClick={() => setIsCartOpenMobile(false)}
+          className="fixed inset-0 z-50 flex flex-col justify-end bg-black/60 backdrop-blur-xs lg:hidden animate-fade-in"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-h-[85vh] bg-white rounded-t-3xl shadow-2xl flex flex-col overflow-hidden animate-slide-up"
+          >
             <div className="flex items-center justify-between p-3.5 border-b border-gray-100 bg-gray-50/70">
               <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2" />
               <div className="flex items-center gap-2 pt-1">
