@@ -53,6 +53,8 @@ interface CartContextType {
   setIsOrderSuccess: (success: boolean) => void;
   isInfoModalOpen: boolean;
   setIsInfoModalOpen: (open: boolean) => void;
+  isBookingModalOpen: boolean;
+  setIsBookingModalOpen: (open: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -70,6 +72,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [customizingItem, setCustomizingItem] = useState<MenuItem | null>(null);
   const [isOrderSuccess, setIsOrderSuccess] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -241,6 +244,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setIsOrderSuccess,
         isInfoModalOpen,
         setIsInfoModalOpen,
+        isBookingModalOpen,
+        setIsBookingModalOpen,
       }}
     >
       {children}

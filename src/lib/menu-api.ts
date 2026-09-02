@@ -34,7 +34,7 @@ export const RESTAURANT_INFO: RestaurantInfo = {
   ShopName: "FoodChow Demo INDIA",
   ShopLogo: "3161_2026-08-07_09-26-02001980b53-0530-49b1-ac6f-618dc1ffe3ec.jpg",
   isOpen: true,
-  timingText: "Timing : Open 24 hours",
+  timingText: "Timing : 10:00 AM to 11:00 PM",
   websitename: "www.foodchow.com",
 };
 

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { X, MapPin, Phone, Clock, ExternalLink, Globe } from "lucide-react";
+import { X, MapPin, Phone, Clock, CalendarCheck } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { RestaurantInfo } from "@/types/foodchow";
 import { getLogoImageUrl } from "@/services/api";
@@ -12,7 +12,7 @@ interface RestaurantInfoModalProps {
 }
 
 export const RestaurantInfoModal: React.FC<RestaurantInfoModalProps> = ({ restaurant }) => {
-  const { isInfoModalOpen, setIsInfoModalOpen } = useCart();
+  const { isInfoModalOpen, setIsInfoModalOpen, setIsBookingModalOpen } = useCart();
 
   if (!isInfoModalOpen) return null;
 
@@ -78,29 +78,23 @@ export const RestaurantInfoModal: React.FC<RestaurantInfoModalProps> = ({ restau
               </div>
             )}
 
-            {restaurant.websitename && (
-              <div className="flex items-start gap-2 pt-2 border-t border-gray-200/60">
-                <Globe className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-semibold text-gray-900 block">Powered By</span>
-                  <a
-                    href={`https://${restaurant.websitename}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline flex items-center gap-1"
-                  >
-                    {restaurant.websitename} <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
-        <div className="p-4 border-t border-gray-100 bg-gray-50/70 flex justify-end shrink-0">
+        <div className="p-4 border-t border-gray-100 bg-gray-50/70 flex gap-2.5 shrink-0">
+          <button
+            onClick={() => {
+              setIsInfoModalOpen(false);
+              setIsBookingModalOpen(true);
+            }}
+            className="flex-1 flex items-center justify-center gap-1.5 bg-primary hover:bg-primary-hover text-white font-semibold py-2.5 rounded-xl transition-colors cursor-pointer text-xs sm:text-sm shadow-xs"
+          >
+            <CalendarCheck className="w-4 h-4" />
+            Book a Table
+          </button>
           <button
             onClick={() => setIsInfoModalOpen(false)}
-            className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-2.5 rounded-xl transition-colors cursor-pointer text-xs sm:text-sm text-center shadow-xs"
+            className="px-5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2.5 rounded-xl transition-colors cursor-pointer text-xs sm:text-sm"
           >
             Close
           </button>
