@@ -4,7 +4,6 @@ import { SubHeader } from "@/components/SubHeader";
 import { CategoryNav } from "@/components/CategoryNav";
 import { MenuContainer } from "@/components/MenuContainer";
 import { Footer } from "@/components/Footer";
-import { TableBookingModal } from "@/components/TableBookingModal";
 import { RestaurantInfoModal } from "@/components/RestaurantInfoModal";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +20,6 @@ export default async function HomePage() {
         <MenuContainer categories={categories} restaurant={restaurant} deals={deals} />
       </main>
       <Footer restaurant={restaurant} />
-      <TableBookingModal restaurant={restaurant} />
       <RestaurantInfoModal restaurant={restaurant} />
     </div>
   );

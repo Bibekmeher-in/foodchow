@@ -71,7 +71,7 @@ export const MenuContainer: React.FC<MenuContainerProps> = ({ categories, deals 
               </div>
               <h3 className="font-bold text-gray-800 text-base mb-1">No food items found</h3>
               <p className="text-xs text-gray-500 max-w-sm mx-auto">
-                We couldn't find any dishes matching "{searchQuery}". Try searching for another dish or clearing filters.
+                We couldn&apos;t find any dishes matching &ldquo;{searchQuery}&rdquo;. Try searching for another dish or clearing filters.
               </p>
             </div>
           ) : (

@@ -37,12 +37,6 @@ interface CartContextType {
   clearCart: () => void;
   getItemQuantityInCart: (itemId: number) => number;
 
-  couponCode: string;
-  appliedCoupon: string | null;
-  discountAmount: number;
-  applyCoupon: (code: string) => { success: boolean; message: string };
-  removeCoupon: () => void;
-
   itemCount: number;
   subtotal: number;
   taxAmount: number;
@@ -57,8 +51,6 @@ interface CartContextType {
   setCustomizingItem: (item: MenuItem | null) => void;
   isOrderSuccess: boolean;
   setIsOrderSuccess: (success: boolean) => void;
-  isBookingModalOpen: boolean;
-  setIsBookingModalOpen: (open: boolean) => void;
   isInfoModalOpen: boolean;
   setIsInfoModalOpen: (open: boolean) => void;
 }
@@ -77,12 +69,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [customizingItem, setCustomizingItem] = useState<MenuItem | null>(null);
   const [isOrderSuccess, setIsOrderSuccess] = useState(false);
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-
-  const [couponCode, setCouponCode] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
-  const [discountPercent, setDiscountPercent] = useState<number>(0);
 
   useEffect(() => {
     try {
@@ -206,8 +193,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => {
     setCart([]);
-    setAppliedCoupon(null);
-    setDiscountPercent(0);
   };
 
   const getItemQuantityInCart = (itemId: number): number => {
@@ -216,33 +201,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       .reduce((sum, i) => sum + i.quantity, 0);
   };
 
-  const applyCoupon = (code: string) => {
-    const formatted = code.trim().toUpperCase();
-    if (formatted === "FOODCHOW10" || formatted === "WELCOME10") {
-      setAppliedCoupon(formatted);
-      setDiscountPercent(10);
-      return { success: true, message: "Coupon applied! You got 10% discount." };
-    }
-    if (formatted === "FOODCHOW20" || formatted === "WELCOME20") {
-      setAppliedCoupon(formatted);
-      setDiscountPercent(20);
-      return { success: true, message: "Coupon applied! You got 20% discount." };
-    }
-    return { success: false, message: "Invalid coupon code. Try FOODCHOW10" };
-  };
-
-  const removeCoupon = () => {
-    setAppliedCoupon(null);
-    setDiscountPercent(0);
-  };
-
   const itemCount = cart.reduce((sum, i) => sum + i.quantity, 0);
-  const subtotal = cart.reduce((sum, i) => sum + i.totalPrice, 0);
-  const discountAmount = Number(((subtotal * discountPercent) / 100).toFixed(2));
-  const subtotalAfterDiscount = Math.max(0, subtotal - discountAmount);
-  const taxAmount = Number((subtotalAfterDiscount * 0.05).toFixed(2));
+  const subtotal = Number(cart.reduce((sum, i) => sum + i.totalPrice, 0).toFixed(2));
+  const taxAmount = Number((subtotal * 0.05).toFixed(2));
   const deliveryFee = orderType === "delivery" && subtotal > 0 ? (subtotal >= 500 ? 0 : 40) : 0;
-  const grandTotal = Number((subtotalAfterDiscount + taxAmount + deliveryFee).toFixed(2));
+  const grandTotal = Number((subtotal + taxAmount + deliveryFee).toFixed(2));
 
   return (
     <CartContext.Provider
@@ -263,11 +226,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         removeFromCart,
         clearCart,
         getItemQuantityInCart,
-        couponCode,
-        appliedCoupon,
-        discountAmount,
-        applyCoupon,
-        removeCoupon,
         itemCount,
         subtotal,
         taxAmount,
@@ -281,8 +239,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setCustomizingItem,
         isOrderSuccess,
         setIsOrderSuccess,
-        isBookingModalOpen,
-        setIsBookingModalOpen,
         isInfoModalOpen,
         setIsInfoModalOpen,
       }}

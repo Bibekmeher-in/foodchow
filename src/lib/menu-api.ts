@@ -6,7 +6,6 @@ import {
   MenuTab,
   RestaurantInfo,
   RestaurantMenuResult,
-  TimingDay,
 } from "@/types/menu";
 import { isUsableMenuData, normalizeMenuData, parseMenuResponse } from "./menu-parser";
 import fallbackDataJson from "@/data/fallback-menu.json";
@@ -15,16 +14,6 @@ export const DEFAULT_SHOP_ID = 3161;
 export const API_MENU_URL = `https://www.foodchow.com/api/FoodChowWD/GetRestaurantMenuWDWidget_multi?ShopId=${DEFAULT_SHOP_ID}&locale_id=null`;
 export const API_CUSTOMIZE_URL = (itemId: number) =>
   `https://admin.foodchow.com/api/FoodChowWD/GetCustomizationDetailsOfItemWD_multiWithOrder?item_id=${itemId}&locale_id=null`;
-
-export const DEFAULT_TIMINGS: TimingDay[] = [
-  { dayname: "Mon", openTime: "10:00 am", closeTime: "11:00 pm" },
-  { dayname: "Tue", openTime: "10:00 am", closeTime: "11:00 pm" },
-  { dayname: "Wed", openTime: "10:00 am", closeTime: "11:00 pm" },
-  { dayname: "Thu", openTime: "10:00 am", closeTime: "11:00 pm" },
-  { dayname: "Fri", openTime: "10:00 am", closeTime: "11:00 pm" },
-  { dayname: "Sat", openTime: "10:00 am", closeTime: "11:00 pm" },
-  { dayname: "Sun", openTime: "10:00 am", closeTime: "11:00 pm" },
-];
 
 export const DEFAULT_MENUS: MenuTab[] = [
   { id: 0, menu_name: "Main Menu", menu_url: "" },
@@ -37,56 +26,12 @@ export const RESTAURANT_INFO: RestaurantInfo = {
   ShopId: "3161",
   ShopName: "FoodChow Demo INDIA",
   ShopLogo: "3161_2026-08-07_09-26-02001980b53-0530-49b1-ac6f-618dc1ffe3ec.jpg",
-  ShopAddress: "Maiden Ln, Surat, Gujarat, India-300034",
-  PhoneNumber: "+91 6356407972",
-  MobileNo: "+91 6351985157",
-  IsVeg: "V, Jain, Vegan, Eggetarian, Gluten-Free",
-  ShopCuisines: ["Pizza", "Wraps", "Chinese", "Desserts", "Italian"],
-  websitename: "www.foodchow.com",
-  MinOrder: 0,
-  DeliveryTime: "30-45 mins",
-  PaymentMethod: "Cash, Online",
   isOpen: true,
-  timingText: "Timing: 10:00 AM - 11:00 PM",
-  fssaiNumber: "Foodchow3161",
-  timingList: DEFAULT_TIMINGS,
+  timingText: "Timing : Open 24 hours",
+  websitename: "www.foodchow.com",
 };
 
-export async function getRestaurantMenu(shopId: number = DEFAULT_SHOP_ID): Promise<RestaurantMenuResult> {
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-    const liveUrl = `https://www.foodchow.com/api/FoodChowWD/GetRestaurantMenuWDWidget_multi?ShopId=${shopId}&locale_id=null`;
-    const res = await fetch(liveUrl, {
-      cache: "no-store",
-      signal: controller.signal,
-      headers: {
-        Accept: "application/json",
-      },
-    });
-
-    clearTimeout(timeoutId);
-
-    if (res.ok) {
-      const liveJson = await res.json();
-      const parsedData = parseMenuResponse(liveJson);
-
-      if (isUsableMenuData(parsedData)) {
-        const { categories, deals } = normalizeMenuData(parsedData, shopId);
-        return {
-          categories,
-          restaurant: RESTAURANT_INFO,
-          deals,
-          menus: DEFAULT_MENUS,
-          dataSource: "live",
-        };
-      }
-    }
-  } catch (error: any) {
-    console.warn("[FoodChow API] Live API request failed:", error?.message || error);
-  }
-
+export function getFallbackMenu(shopId: number = DEFAULT_SHOP_ID): RestaurantMenuResult {
   try {
     const parsedFallback = parseMenuResponse(fallbackDataJson);
     const { categories, deals } = normalizeMenuData(parsedFallback, shopId);
@@ -108,6 +53,50 @@ export async function getRestaurantMenu(shopId: number = DEFAULT_SHOP_ID): Promi
       dataSource: "fallback",
     };
   }
+}
+
+export async function getRestaurantMenu(shopId: number = DEFAULT_SHOP_ID): Promise<RestaurantMenuResult> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+    const liveUrl = `https://www.foodchow.com/api/FoodChowWD/GetRestaurantMenuWDWidget_multi?ShopId=${shopId}&locale_id=null`;
+    const res = await fetch(liveUrl, {
+      cache: "no-store",
+      signal: controller.signal,
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      const liveJson = await res.json();
+
+      // Check explicit requirement condition: message === "No any records found!"
+      if (liveJson && liveJson.message === "No any records found!") {
+        return getFallbackMenu(shopId);
+      }
+
+      // Check if response contains usable menu data
+      const parsedData = parseMenuResponse(liveJson);
+      if (isUsableMenuData(parsedData)) {
+        const { categories, deals } = normalizeMenuData(parsedData, shopId);
+        return {
+          categories,
+          restaurant: RESTAURANT_INFO,
+          deals,
+          menus: DEFAULT_MENUS,
+          dataSource: "live",
+        };
+      }
+    }
+  } catch (error: any) {
+    console.warn("[FoodChow API] Live API request failed, loading fallback data:", error?.message || error);
+  }
+
+  return getFallbackMenu(shopId);
 }
 
 export async function getItemCustomizations(itemId: number): Promise<CustomizationDetails | null> {

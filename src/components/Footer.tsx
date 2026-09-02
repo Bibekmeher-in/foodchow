@@ -13,8 +13,10 @@ export const Footer: React.FC<FooterProps> = ({ restaurant }) => {
     <footer className="bg-white border-t border-[#dadada] mt-auto py-3.5 px-4">
       <div className="mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-[#1f2430]">
         <div className="text-[#1f2430] text-xs sm:text-sm md:text-[15px] font-normal">
-          {restaurant.fssaiNumber && (
+          {restaurant.fssaiNumber ? (
             <span>FSSAI Lic No. {restaurant.fssaiNumber}</span>
+          ) : (
+            <span>{restaurant.ShopName}</span>
           )}
         </div>
 

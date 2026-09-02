@@ -17,7 +17,6 @@ export const Header: React.FC<HeaderProps> = ({ restaurant }) => {
     setOrderType,
     itemCount,
     setIsCartOpenMobile,
-    setIsBookingModalOpen,
     setIsInfoModalOpen,
   } = useCart();
 
@@ -77,23 +76,29 @@ export const Header: React.FC<HeaderProps> = ({ restaurant }) => {
                   </span>
                 </div>
                 
-                <button
-                  onClick={() => setIsInfoModalOpen(true)}
-                  className="flex items-center gap-1 text-[11px] sm:text-xs text-gray-500 truncate cursor-pointer hover:text-gray-800 transition-colors text-left"
-                >
-                  <MapPin className="w-3 h-3 text-primary shrink-0" />
-                  <span className="truncate max-w-[200px] sm:max-w-xs md:max-w-md">{restaurant.ShopAddress}</span>
-                </button>
+                {restaurant.ShopAddress ? (
+                  <button
+                    onClick={() => setIsInfoModalOpen(true)}
+                    className="flex items-center gap-1 text-[11px] sm:text-xs text-gray-500 truncate cursor-pointer hover:text-gray-800 transition-colors text-left"
+                  >
+                    <MapPin className="w-3 h-3 text-primary shrink-0" />
+                    <span className="truncate max-w-[200px] sm:max-w-xs md:max-w-md">{restaurant.ShopAddress}</span>
+                  </button>
+                ) : (
+                  <p className="text-[11px] sm:text-xs text-gray-500 truncate">
+                    Online Restaurant Menu & Ordering
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="lg:hidden flex items-center gap-1.5 shrink-0">
               <button
-                onClick={() => setIsBookingModalOpen(true)}
+                onClick={() => setIsInfoModalOpen(true)}
                 className="p-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors cursor-pointer"
-                title="Book a Table"
+                title="Restaurant Info"
               >
-                <Calendar className="w-4 h-4" />
+                <Info className="w-4 h-4" />
               </button>
 
               <button
@@ -115,7 +120,7 @@ export const Header: React.FC<HeaderProps> = ({ restaurant }) => {
             <button
               onClick={() => setIsInfoModalOpen(true)}
               className="hidden md:flex flex-col items-end text-right pr-2 cursor-pointer hover:opacity-80 transition-opacity"
-              title="Click to view weekly opening hours"
+              title="Click to view details"
             >
               <div className="flex items-center gap-1 text-xs font-semibold text-[#0AA89E]">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#0AA89E] animate-pulse"></span>
@@ -125,14 +130,6 @@ export const Header: React.FC<HeaderProps> = ({ restaurant }) => {
                 <Clock className="w-3 h-3" />
                 <span>{restaurant.timingText}</span>
               </div>
-            </button>
-
-            <button
-              onClick={() => setIsBookingModalOpen(true)}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-primary border border-primary/50 hover:bg-primary/10 rounded-lg transition-all cursor-pointer shadow-2xs"
-            >
-              <Calendar className="w-3.5 h-3.5" />
-              <span>Table Booking</span>
             </button>
 
             <div className="flex items-center bg-gray-100 p-0.5 sm:p-1 rounded-lg border border-gray-200 w-full sm:w-auto justify-between sm:justify-start">

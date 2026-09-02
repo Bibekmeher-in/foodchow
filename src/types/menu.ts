@@ -129,20 +129,14 @@ export interface CartItem {
 export interface RestaurantInfo {
   ShopId: string;
   ShopName: string;
-  ShopLogo: string;
-  ShopAddress: string;
-  PhoneNumber: string;
-  MobileNo: string;
-  IsVeg: string;
-  ShopCuisines: string[];
-  websitename?: string;
-  MinOrder: number;
-  DeliveryTime: string;
-  PaymentMethod: string;
+  ShopLogo?: string;
   isOpen: boolean;
   timingText: string;
-  fssaiNumber: string;
-  timingList?: TimingDay[];
+  ShopAddress?: string;
+  PhoneNumber?: string;
+  websitename?: string;
+  ShopCuisines?: string[];
+  fssaiNumber?: string;
 }
 
 export interface FoodChowResponse {

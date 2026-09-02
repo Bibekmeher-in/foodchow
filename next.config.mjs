@@ -17,10 +17,6 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'foodchowdemoindia.foodchow.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
       }
     ],
   },

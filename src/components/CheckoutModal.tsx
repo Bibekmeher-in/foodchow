@@ -21,14 +21,11 @@ export const CheckoutModal: React.FC = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "card">("cash");
-  const [orderNumber, setOrderNumber] = useState("");
 
   if (!isCheckoutModalOpen) return null;
 
   const handlePlaceOrder = (e: React.FormEvent) => {
     e.preventDefault();
-    const generatedOrderNo = `FC-${Math.floor(100000 + Math.random() * 900000)}`;
-    setOrderNumber(generatedOrderNo);
     setIsOrderSuccess(true);
     clearCart();
   };
@@ -43,7 +40,7 @@ export const CheckoutModal: React.FC = () => {
       <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b border-gray-100 shrink-0">
           <h2 className="font-bold text-gray-900 text-base sm:text-lg">
-            {isOrderSuccess ? "Order Confirmed!" : "Review & Checkout"}
+            {isOrderSuccess ? "Order Placed Successfully" : "Review & Checkout"}
           </h2>
           <button
             onClick={handleClose}
@@ -63,15 +60,11 @@ export const CheckoutModal: React.FC = () => {
             <div>
               <h3 className="text-xl font-bold text-gray-900">Thank You For Your Order!</h3>
               <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                Your order has been received by the restaurant and is now being prepared.
+                Your order request for <span className="font-semibold text-gray-900">{fullName || "Customer"}</span> has been recorded.
               </p>
             </div>
 
             <div className="bg-gray-50 rounded-xl p-4 border border-gray-200/80 text-left space-y-2 text-xs sm:text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-500">Order ID:</span>
-                <span className="font-bold text-gray-900">{orderNumber}</span>
-              </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Order Type:</span>
                 <span className="font-semibold text-primary capitalize">
@@ -79,24 +72,15 @@ export const CheckoutModal: React.FC = () => {
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Estimated Time:</span>
-                <span className="font-semibold text-gray-900">30-45 Minutes</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Payment:</span>
+                <span className="text-gray-500">Payment Method:</span>
                 <span className="font-semibold text-gray-900 capitalize">
                   {paymentMethod === "cash" ? "Cash on Delivery" : "Card / Online"}
                 </span>
               </div>
               <div className="flex justify-between pt-2 border-t border-gray-200 font-bold text-gray-900">
-                <span>Amount:</span>
+                <span>Total Amount:</span>
                 <span className="text-primary text-base">{formatPrice(grandTotal)}</span>
               </div>
-            </div>
-
-            <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 p-2.5 rounded-lg border border-emerald-200">
-              <ShieldCheck className="w-4 h-4" />
-              <span>We have sent an SMS confirmation to your number.</span>
             </div>
 
             <button

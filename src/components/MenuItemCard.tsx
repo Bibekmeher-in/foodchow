@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Plus, Minus, SlidersHorizontal } from "lucide-react";
 import { MenuItem } from "@/types/foodchow";
@@ -13,6 +13,7 @@ interface MenuItemCardProps {
 
 export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item }) => {
   const { addToCart, updateQuantity, cart, setCustomizingItem } = useCart();
+  const [imageError, setImageError] = useState(false);
 
   const imageUrl = getItemImageUrl(item.ItemImage);
   const displayPrice = getItemDisplayPrice(item);
@@ -61,7 +62,7 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item }) => {
     </div>
   );
 
-  if (imageUrl) {
+  if (imageUrl && !imageError) {
     return (
       <div className="group flex flex-col bg-white rounded-xl shadow-xs border border-gray-200/80 overflow-hidden hover:shadow-md transition-all duration-200 h-full">
         <div className="relative w-full h-36 sm:h-40 bg-gray-100 overflow-hidden shrink-0">
@@ -71,9 +72,7 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item }) => {
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover group-hover:scale-105 transition-transform duration-300"
-            onError={(e) => {
-              (e.target as HTMLElement).style.display = "none";
-            }}
+            onError={() => setImageError(true)}
           />
           <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-xs p-1 rounded shadow-xs">
             <VegIndicator />

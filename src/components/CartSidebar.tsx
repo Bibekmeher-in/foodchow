@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
-import { ShoppingBag, Trash2, Plus, Minus, ArrowRight, Truck, Store, Tag, X } from "lucide-react";
+import { ShoppingBag, Trash2, Plus, Minus, ArrowRight, Truck, Store } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/services/api";
 
@@ -18,26 +18,9 @@ export const CartSidebar: React.FC = () => {
     subtotal,
     taxAmount,
     deliveryFee,
-    discountAmount,
     grandTotal,
-    appliedCoupon,
-    applyCoupon,
-    removeCoupon,
     setIsCheckoutModalOpen,
   } = useCart();
-
-  const [inputCoupon, setInputCoupon] = useState("");
-  const [couponMsg, setCouponMsg] = useState<{ success: boolean; text: string } | null>(null);
-
-  const handleApplyCoupon = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputCoupon.trim()) return;
-    const res = applyCoupon(inputCoupon);
-    setCouponMsg({ success: res.success, text: res.message });
-    if (res.success) {
-      setInputCoupon("");
-    }
-  };
 
   return (
     <div className="flex flex-col bg-white rounded-2xl border border-gray-200 shadow-xs h-full min-h-[520px]">
@@ -177,7 +160,7 @@ export const CartSidebar: React.FC = () => {
 
                 {cartItem.notes && (
                   <div className="text-[11px] text-amber-700 italic mt-0.5 pl-5">
-                    Note: "{cartItem.notes}"
+                    Note: &ldquo;{cartItem.notes}&rdquo;
                   </div>
                 )}
 
@@ -226,61 +209,11 @@ export const CartSidebar: React.FC = () => {
 
       {cart.length > 0 && (
         <div className="p-4 border-t border-gray-100 bg-gray-50/60 space-y-3 shrink-0">
-          <div className="space-y-1.5">
-            {appliedCoupon ? (
-              <div className="flex items-center justify-between p-2 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800">
-                <div className="flex items-center gap-1.5">
-                  <Tag className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="font-bold">{appliedCoupon}</span>
-                  <span className="text-emerald-600">(-{formatPrice(discountAmount)})</span>
-                </div>
-                <button
-                  onClick={removeCoupon}
-                  className="p-1 text-emerald-600 hover:text-red-600 transition-colors cursor-pointer"
-                  title="Remove Coupon"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleApplyCoupon} className="flex gap-1.5">
-                <input
-                  type="text"
-                  value={inputCoupon}
-                  onChange={(e) => setInputCoupon(e.target.value)}
-                  placeholder="Coupon code (e.g. FOODCHOW10)"
-                  className="flex-1 text-xs p-2 border border-gray-200 rounded-lg outline-none focus:border-primary bg-white uppercase placeholder:normal-case"
-                />
-                <button
-                  type="submit"
-                  className="px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-hover transition-colors cursor-pointer"
-                >
-                  Apply
-                </button>
-              </form>
-            )}
-            {couponMsg && !appliedCoupon && (
-              <p
-                className={`text-[11px] ${
-                  couponMsg.success ? "text-emerald-600" : "text-red-500"
-                }`}
-              >
-                {couponMsg.text}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-1.5 text-xs text-gray-600 pt-1 border-t border-gray-200/60">
+          <div className="space-y-1.5 text-xs text-gray-600">
             <div className="flex justify-between">
               <span>Item Subtotal</span>
               <span className="font-medium text-gray-900">{formatPrice(subtotal)}</span>
             </div>
-            {discountAmount > 0 && (
-              <div className="flex justify-between text-emerald-600 font-medium">
-                <span>Coupon Discount</span>
-                <span>-{formatPrice(discountAmount)}</span>
-              </div>
-            )}
             <div className="flex justify-between">
               <span>Taxes & Charges (5% GST)</span>
               <span className="font-medium text-gray-900">{formatPrice(taxAmount)}</span>
